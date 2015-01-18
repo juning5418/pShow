@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.pshow.mapper.TrackingMapper">
+	<insert id="addTracking" parameterType="Tracking">
+
+		INSERT INTO tracking
+		(
+		title,
+		content,
+		addTime,
+		editTime,
+		del,
+		projectId
+		)
+		VALUES
+		(
+		#{title},
+		#{content},
+		now(),
+		now(),
+		0,
+		#{projectId}
+		);
+	</insert>
+
+	<delete id="delTracking" parameterType="Tracking">
+		update Tracking set del = 1 where id=#{id}
+	</delete>
+
+	<update id="editTracking" parameterType="Tracking">
+		update Tracking
+		<set>
+			<if test="title  != null">
+				title = #{title},
+			</if>
+			<if test="content  != null">
+				content = #{content},
+			</if>
+			<if test="editTime  != null">
+				editTime = #{editTime},
+			</if>
+		</set>
+		where id=#{id}
+	</update>
+
+	<select id="loadTracking" parameterType="Tracking" resultType="Tracking">
+		select * from Tracking where 1 = 1
+			AND id = #{id}
+	</select>
+
+	<select id="queryTracking" parameterType="Map" resultType="Tracking">
+		select * from Tracking where del = '0'
+		<if test="projectId  != null">
+				AND projectId = #{projectId}
+			</if>
+			order by id desc 
+		LIMIT #{start},#{limit}
+	</select>
+
+	<select id="queryTrackingCount" parameterType="Map" resultType="int">
+		select COUNT(*) from Tracking where 1= 1
+		<if test="projectId  != null">
+				AND projectId = #{projectId}
+			</if>
+	</select>
+
+</mapper>

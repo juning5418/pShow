@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"  
+	xmlns:mvc="http://www.springframework.org/schema/mvc"  
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.1.xsd 
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+	http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.1.xsd
+	http://www.springframework.org/schema/mvc
+    http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd">
+
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass" value="${jdbc.driverClass}"/>
+        <property name="jdbcUrl" value="${jdbc.jdbcUrl}"/>
+        <property name="user" value="${jdbc.user}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <property name="initialPoolSize" value="10" />
+        <property name="minPoolSize" value="5" />
+        <property name="maxPoolSize" value="30" />
+        <property name="acquireIncrement" value="5" />
+        <property name="maxIdleTime" value="60" />
+        <property name="maxStatements" value="0" />
+        <property name="acquireRetryAttempts"> 
+            <value>10</value> 
+        </property> 
+        <property name="breakAfterAcquireFailure"> 
+            <value>true</value> 
+        </property> 
+    </bean>
+    
+   <context:property-placeholder location="classpath:jdbc.properties"/>
+
+	<!-- 配置事物管理 -->    
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	  <property name="dataSource" ref="dataSource"/>
+	</bean>
+    
+    <tx:annotation-driven />    
+    
+   	<!-- 配置sqlSessionFactory对象 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">    
+           <property name="dataSource" ref="dataSource"/>
+           <!-- 
+                                      扫描指定目录的Mapper映射文件
+              <property name="configLocation" value="classpath:mybatis-config.xml"/> 
+           -->
+           <property name="mapperLocations" value="classpath*:com/pshow/persistence/*.xml"/>
+           <property name="typeAliasesPackage" value="com.pshow.pojo" />
+    </bean>
+       
+    <!-- 通过扫描方式进行自动装配处理-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.pshow.mapper" />
+        <!--
+                         当所有mapper继承某个接口，可以配置makerInterface进行配置
+          <property name="makerInterface" value="com.hoo.mapper.SqlMapper"/>
+        -->
+    </bean>
+
+    <mvc:annotation-driven />
+    
+    <!-- 自动扫描的包名 --> 
+    <context:component-scan base-package="com.pshow" />
+    
+    <mvc:view-controller path="/" view-name="index"/>
+    
+    <!-- 视图解释类 -->
+    <bean  class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    	<property name="suffix" value=".jsp"/>
+    	<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+    </bean>
+    
+    <!-- 验证 -->
+    <bean class="org.springframework.validation.beanvalidation.BeanValidationPostProcessor"/>  
+    
+    <!-- 文件上传-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	    <property name="maxInMemorySize">
+	        <value>4096</value>
+	    </property>
+    </bean>
+    
+        <!-- 拦截器 -->
+	<mvc:interceptors>
+	    <!-- 多个拦截器,顺序执行 -->
+	    <mvc:interceptor>
+	       <mvc:mapping path="/com/pshow/controller/*" /><!-- 如果不配置或/*,将拦截所有的Controller -->
+	       <bean class="com.pshow.interceptor.CommonInterceptor"></bean>
+	    </mvc:interceptor>
+	</mvc:interceptors>
+    
+     <!-- webservice -->
+    <!-- <bean id="magNetServerService" class="com.yibei.service.admin.impl.MagNetServerServiceImpl">
+  	</bean>  -->
+      
+ 	<mvc:default-servlet-handler/>
+
+</beans> 

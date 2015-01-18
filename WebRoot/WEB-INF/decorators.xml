@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<decorators defaultdir="/templates">
+    <!-- 不需要进行模板组装页面放入下面 -->
+    <excludes>
+    	<pattern>/soft/*</pattern>
+    	<pattern>/forward.html</pattern>
+    	<pattern>/toLogin.html</pattern>
+    	<pattern>/toResetPwd.html</pattern>
+    	<pattern>/resetPassword.html</pattern>
+    	<pattern>/toRegister.html</pattern>
+    	<pattern>/registMember.html</pattern>    	
+    	<pattern>/login.jsp</pattern>
+        <pattern>/register.jsp</pattern>
+        <pattern>/admin/login.jsp</pattern>
+        <pattern>/admin/uploader/*</pattern>
+        <pattern>/js/*</pattern>
+        <pattern>/data/*</pattern>
+        <pattern>/company/*</pattern>
+        <pattern>/admin/css/*</pattern>
+        <pattern>/admin/images/*</pattern>
+    </excludes>
+    <!-- 配置模板 -->
+    <decorator name="main" page="main.jsp"><!-- 主模板 -->
+        <pattern>/admin/*</pattern>
+    </decorator>
+    <decorator name="user_center" page="user_center.jsp"><!-- 用户中心模板 -->
+        <pattern>/user-center/*.html</pattern>
+    </decorator>
+     <decorator name="front_common" page="front_common.jsp"><!-- 前台公共中心模板 -->
+        <pattern>/*.html</pattern>
+        <pattern>/search</pattern>
+    </decorator>
+    <decorator name="release_main" page="release_main.jsp"><!-- 前台发布信息模板 -->
+        <pattern>/release/*.html</pattern>
+    </decorator>
+</decorators>

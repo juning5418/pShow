@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<!-- 引入XFire预配置信息 -->
+    <import resource="classpath:org/codehaus/xfire/spring/xfire.xml" />
+	
+    <!-- START SNIPPET: xfire -->
+    <bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+        <property name="urlMap">
+            <map>
+            	<!-- 访问地址 有几个路径就需要配置几个<entry>信息  -->  
+                <entry key="/getHomeInfo.ws">
+                    <ref bean="getHomeInfo"/>
+                </entry>
+            </map>
+        </property>
+    </bean>
+    
+    <!-- 使用XFire导出器 -->
+    <bean id="baseWebService" class="org.codehaus.xfire.spring.remoting.XFireExporter" abstract="true">
+       <!-- 引用xfire.xml中定义的工厂 -->
+       <property name="serviceFactory" ref="xfire.serviceFactory" />
+       <!-- 引用xfire.xml中的xfire实例 -->
+       <property name="xfire" ref="xfire" />
+    </bean>
+    
+    
+    <bean id="getHomeInfo" parent="baseWebService">
+    	<!-- 业务服务bean -->
+        <property name="serviceBean">
+            <ref bean="magNetServerService"/>
+        </property>
+        <property name="serviceClass">
+            <value>com.yibei.service.admin.MagNetServerService</value>
+        </property>
+    </bean>
+    <!-- END SNIPPET: xfire -->
+</beans>

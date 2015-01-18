@@ -1,0 +1,13 @@
+@charset "utf-8";
+body{margin:0; padding:0; font-family:"宋体"; background: url(../images/login_pp.jpg) repeat-x 0 212px #d6dee0; font-size:12px; font-weight:bold; color:#999;}
+dl,dd,form{margin:0; padding:0;}
+input{margin:0;padding:0;}
+img{border:none;}
+
+.login{width:1000px; height:720px;background:url(../images/login_bg.jpg) no-repeat; margin:0 auto;}
+.login_content{width:370px; height:200px; margin:0 auto; padding-top:300px;}
+.login_content dd{float:left; line-height:34px; padding-bottom:20px;}
+.login_content dt{float:left; width:315px; margin-left:55px;}
+.login_content input{border:none; color:#666;}
+.kuang_1{width:232px; height:34px; background:url(../images/kuang_1.jpg) no-repeat; line-height:34px; padding:0 10px 0 40px;}
+.kuang_2{width:232px; height:34px; background:url(../images/kuang_2.jpg) no-repeat; line-height:34px; padding:0 10px 0 40px;}

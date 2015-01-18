@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="pShow"
+  id="myeclipse.1375087736544"
+  context-root="/pShow"
+  j2ee-spec="6.0"
+  archive="pShow.war">
+  <attributes>
+    <attribute name="webrootdir" value="WebRoot" />
+  </attributes>
+</project-module>
+

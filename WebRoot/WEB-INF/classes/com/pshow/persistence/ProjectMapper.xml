@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.pshow.mapper.ProjectMapper">
+	<insert id="addProject" parameterType="Project">
+
+		INSERT INTO project
+		(
+		projectName,
+		projectNo,
+		createDate,
+		startDate,
+		endDate,
+		remarks,
+		contactPerson,
+		contact,
+		company,
+		del,
+		status
+		)
+		VALUES
+		(
+		#{projectName},
+		#{projectNo},
+		now(),
+		#{startDate},
+		#{endDate},
+		#{remarks},
+		#{contactPerson},
+		#{contact},
+		#{company},
+		'0',
+		'0'
+		);
+	</insert>
+
+	<delete id="delProject" parameterType="Project">
+		update Project set del
+		= 1 where id in (#{projectNo})
+	</delete>
+
+	<update id="editProject" parameterType="Project">
+		update Project
+		<set>
+			<if test="projectName  != null">
+				projectName = #{projectName},
+			</if>
+			<if test="projectNo  != null">
+				projectNo = #{projectNo},
+			</if>
+			<if test="startDate  != null">
+				startDate = #{startDate},
+			</if>
+			<if test="endDate  != null">
+				endDate = #{endDate},
+			</if>
+			<if test="remarks  != null">
+				remarks = #{remarks},
+			</if>
+			<if test="contactPerson  != null">
+				contactPerson = #{contactPerson},
+			</if>
+			<if test="contact  != null">
+				contact = #{contact},
+			</if>
+			<if test="company  != null">
+				company = #{company},
+			</if>
+			<if test="del  != null">
+				del = #{del},
+			</if>
+			<if test="status  != null">
+				status = #{status},
+			</if>
+		</set>
+		where id=#{id}
+	</update>
+
+	<select id="loadProject" parameterType="Project" resultType="Project">
+		select * from Project where 1 = 1
+			AND id = #{id}
+	</select>
+
+	<select id="queryProject" parameterType="Map" resultType="Project">
+		select
+		* from Project where del = '0'
+		<if test="projectName  != null">
+			AND  projectName = #{projectName}   
+		</if>
+		<if test="orderField != null and !orderField.equals('')">
+			order by #{orderField} 
+			<if test="orderDirection != null and !orderDirection.equals('')">
+				#{orderDirection} 
+			</if> 
+			<if test="orderDirection == null or orderDirection.equals('')">
+				DESC
+			</if>
+		</if>
+		<if test="orderField == null or orderField.equals('')">
+		  order by id DESC
+		 </if>
+		<if test="start !=  null">
+		LIMIT #{start},#{limit}
+		</if>
+	</select>
+
+	<select id="queryProjectCount" parameterType="Map" resultType="int">
+		select COUNT(*) from Project where del='0' 
+		<if test="projectName  != null">
+			AND  projectName = #{projectName}
+		</if>
+	</select>
+
+</mapper>
